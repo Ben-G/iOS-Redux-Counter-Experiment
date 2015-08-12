@@ -18,7 +18,7 @@ class Redux {
     
     func dispatch(actionProvider: ActionProviderProvider) {
         // find store
-        let action = actionProvider()(state: counterState)
+        let action = actionProvider()(state: counterState, redux: self)
         guard let providedAction = action else { return }
         
         counterState = Counter().handleAction(counterState, action: providedAction)
@@ -41,4 +41,4 @@ class Redux {
 }
 
 typealias ActionProviderProvider = () -> ActionProvider
-typealias ActionProvider = (state: Int) -> Action?
+typealias ActionProvider = (state: Int, redux: Redux) -> Action?

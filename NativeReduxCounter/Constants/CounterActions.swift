@@ -23,7 +23,7 @@ struct CounterActions {
     }
     
     static func incrementIfOdd() -> ActionProvider {
-        return { state in
+        return { state, _ in
             if (state % 2 == 0) {
                 return nil
             }
@@ -32,4 +32,24 @@ struct CounterActions {
         }
     }
     
+    static func incrementAfterDelay() -> ActionProvider {
+        return { _, redux in
+            delay(1.0) {
+                redux.dispatch { CounterActions.increment() }
+            }
+            
+            return nil
+        }
+    }
+    
+}
+
+
+func delay(delay:Double, closure:()->()) {
+    dispatch_after(
+        dispatch_time(
+            DISPATCH_TIME_NOW,
+            Int64(delay * Double(NSEC_PER_SEC))
+        ),
+        dispatch_get_main_queue(), closure)
 }

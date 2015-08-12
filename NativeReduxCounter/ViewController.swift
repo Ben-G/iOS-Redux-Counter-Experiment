@@ -29,6 +29,11 @@ class ViewController: UIViewController {
     @IBAction func incrementIfOdd(sender: AnyObject) {
         Redux.sharedInstance.dispatch { CounterActions.incrementIfOdd() }
     }
+    
+    @IBAction func incrementAfterDelay(sender: AnyObject) {
+        Redux.sharedInstance.dispatch { CounterActions.incrementAfterDelay() }
+    }
+    
 }
 
 extension ViewController: ReduxSubscriber {
