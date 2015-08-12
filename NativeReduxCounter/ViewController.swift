@@ -15,17 +15,20 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        Redux.sharedInstance.subscribe(self)
+        Redux.sharedInstance.subscribeToCounter(self)
     }
 
     @IBAction func increment(sender: AnyObject) {
-        Redux.sharedInstance.dispatch(Action.Increment)
+        Redux.sharedInstance.dispatch { CounterActions.increment() }
     }
     
     @IBAction func decrement(sender: AnyObject) {
-        Redux.sharedInstance.dispatch(Action.Decrement)
+        Redux.sharedInstance.dispatch { CounterActions.decrement() }
     }
     
+    @IBAction func incrementIfOdd(sender: AnyObject) {
+        Redux.sharedInstance.dispatch { CounterActions.incrementIfOdd() }
+    }
 }
 
 extension ViewController: ReduxSubscriber {

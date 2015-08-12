@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct Counter: Store {
+struct Counter {
     
     func handleAction(state: Int = 0, action:Action) -> Int {
         switch action {

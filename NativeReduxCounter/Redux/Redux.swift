@@ -12,23 +12,33 @@ class Redux {
     private init() {}
     
     private var counterState: Int = Counter().handleAction(action: Action.Mount)
-    private var subscribers: [AnyReduxSubscriber<Int>] = []
+    private var counterSubscribers: [AnyReduxSubscriber<Int>] = []
     
     static let sharedInstance = Redux()
     
-    func dispatch(action: Action) {
+    func dispatch(actionProvider: ActionProviderProvider) {
         // find store
-        counterState = Counter().handleAction(counterState, action: action)
+        let action = actionProvider()(state: counterState)
+        guard let providedAction = action else { return }
+        
+        counterState = Counter().handleAction(counterState, action: providedAction)
         // modify state with store action
         // update subscribers with new state
-        for subscriber in subscribers {
+        for subscriber in counterSubscribers {
             subscriber.newState(counterState)
         }
     }
     
-    func subscribe<T: ReduxSubscriber where T.StoreType == Int>(subscriber: T) {
-        subscribers.append(AnyReduxSubscriber(subscriber))
+    func subscribeToCounter<T: ReduxSubscriber where T.StoreType == Int>(subscriber: T) {
+        counterSubscribers.append(AnyReduxSubscriber(subscriber))
         subscriber.newState(counterState)
     }
     
+    func getCounterState() -> Int {
+        return counterState
+    }
+    
 }
+
+typealias ActionProviderProvider = () -> ActionProvider
+typealias ActionProvider = (state: Int) -> Action?

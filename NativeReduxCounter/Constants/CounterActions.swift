@@ -10,12 +10,26 @@ import Foundation
 
 struct CounterActions {
     
-    func increment() -> Action {
-        return Action.Increment
+    static func increment() -> ActionProvider {
+        return { _ in
+            return Action.Increment
+        }
     }
     
-    func decrement() -> Action {
-        return Action.Decrement
+    static func decrement() -> ActionProvider {
+        return { _ in
+            return Action.Decrement
+        }
+    }
+    
+    static func incrementIfOdd() -> ActionProvider {
+        return { state in
+            if (state % 2 == 0) {
+                return nil
+            }
+            
+            return Action.Increment
+        }
     }
     
 }
